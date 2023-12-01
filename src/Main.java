@@ -5,6 +5,19 @@ public class Main {
 
         System.out.println("Kocham Jave");
 
+        System.out.println(Main.add(1,2));
+        System.out.println("proba");
+
+    }
+
+    public int dodajLiczby(int a, int b) {
+        return a + b;
+
+    }
+
+    public void pobierzDaneZSerweraIPrzekazDoBase() {
+
+
     }
 
 
