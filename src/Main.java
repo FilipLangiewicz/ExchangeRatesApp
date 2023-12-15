@@ -5,7 +5,6 @@ public class Main {
 
         System.out.println("Kocham Jave");
 
-        System.out.println(Main.add(1,2));
         System.out.println("proba");
 
     }
