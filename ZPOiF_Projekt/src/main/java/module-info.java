@@ -4,6 +4,7 @@ module com.example.zpoif_projekt {
 
     requires org.controlsfx.controls;
     requires org.kordamp.ikonli.javafx;
+    requires java.net.http;
 
     opens pl.pw.edu.mini.zpoif.Application to javafx.fxml;
     exports pl.pw.edu.mini.zpoif.Application;
