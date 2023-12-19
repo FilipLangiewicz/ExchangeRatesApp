@@ -1,5 +1,6 @@
 package pl.pw.edu.mini.zpoif.Api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
@@ -9,7 +10,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-//import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Api {
     private String linkTableA = "http://api.nbp.pl/api/exchangerates/tables/A/";
@@ -41,8 +42,8 @@ public class Api {
         HttpResponse<String> response;
         try {
             response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            //CurrencyRate[] currencyRates = readResponseAndMap(response);
-            //return currencyRates;
+            CurrencyRate[] currencyRates = readResponseAndMap(response);
+            return currencyRates;
 
         } catch (ConnectException ex) {
             Alert noConnectionAlert = new Alert(Alert.AlertType.ERROR);
@@ -59,7 +60,11 @@ public class Api {
 
 
     private CurrencyRate[] readResponseAndMap(HttpResponse<String> response){
-        //CurrencyRate[] currencyRates =
+        try {
+            CurrencyRate[] currencyRates = new ObjectMapper().readValue(response.body(), CurrencyRate[].class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 
