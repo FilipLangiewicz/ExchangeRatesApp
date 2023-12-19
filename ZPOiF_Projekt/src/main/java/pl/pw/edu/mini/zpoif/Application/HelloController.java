@@ -1,4 +1,4 @@
-package com.example.zpoif_projekt;
+package pl.pw.edu.mini.zpoif.Application;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

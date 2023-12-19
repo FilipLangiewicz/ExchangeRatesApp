@@ -69,7 +69,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.example.zpoif_projekt/com.example.zpoif_projekt.HelloApplication</mainClass>
+                            <mainClass>com.example.zpoif_projekt/pl.pw.edu.mini.zpoif.Application.HelloApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
