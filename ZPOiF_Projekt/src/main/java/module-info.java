@@ -6,7 +6,10 @@ module com.example.zpoif_projekt {
     requires org.kordamp.ikonli.javafx;
     requires java.net.http;
     requires com.fasterxml.jackson.databind;
+    requires java.compiler;
 
-    opens pl.pw.edu.mini.zpoif.Application to javafx.fxml;
+    opens pl.pw.edu.mini.zpoif to javafx.fxml;
+    exports pl.pw.edu.mini.zpoif.Api;
     exports pl.pw.edu.mini.zpoif.Application;
+    opens pl.pw.edu.mini.zpoif.Application to javafx.fxml;
 }

@@ -10,28 +10,31 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Api {
-    private String linkTableA = "http://api.nbp.pl/api/exchangerates/tables/A/";
-    private String linkTableB = "http://api.nbp.pl/api/exchangerates/tables/B/";
-    private String linkTableC = "http://api.nbp.pl/api/exchangerates/tables/C/";
+    private final String linkTableA = "http://api.nbp.pl/api/exchangerates/tables/A/";
+    private final String linkTableB = "http://api.nbp.pl/api/exchangerates/tables/B/";
+    private final String linkTableC = "http://api.nbp.pl/api/exchangerates/tables/C/";
 
 
-    private CurrencyRate[] getApiData(HttpClient httpClient) {
+    public CurrencyRate[] getApiData(HttpClient httpClient) {
         CurrencyRate[] tableA = importTableData(linkTableA, httpClient);
         CurrencyRate[] tableB = importTableData(linkTableB, httpClient);
         CurrencyRate[] tableC = importTableData(linkTableC, httpClient);
 
-        CurrencyRate[] currencyRates = mergeTables(tableA, tableB, tableC);
 
-
-        return currencyRates;
+        return mergeTables(tableA, tableB, tableC);
     }
 
     private CurrencyRate[] mergeTables(CurrencyRate[] tableA, CurrencyRate[] tableB, CurrencyRate[] tableC) {
-        CurrencyRate[] mergedTable = null;
-        return mergedTable;
+        return Stream.concat(
+                Stream.concat(Arrays.stream(tableA), Arrays.stream(tableB)),
+                Arrays.stream(tableC)
+        ).toArray(CurrencyRate[]::new);
     }
 
     private CurrencyRate[] importTableData(String url, HttpClient httpClient) {
@@ -42,9 +45,8 @@ public class Api {
         HttpResponse<String> response;
         try {
             response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            CurrencyRate[] currencyRates = readResponseAndMap(response);
-            return currencyRates;
-
+            System.out.println(response.body());
+            return readResponseAndMap(response);
         } catch (ConnectException ex) {
             Alert noConnectionAlert = new Alert(Alert.AlertType.ERROR);
             noConnectionAlert.setHeaderText("Nie można połączyć się z serwerem.");
@@ -55,17 +57,18 @@ public class Api {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        return null;
     }
 
 
     private CurrencyRate[] readResponseAndMap(HttpResponse<String> response){
         try {
-            CurrencyRate[] currencyRates = new ObjectMapper().readValue(response.body(), CurrencyRate[].class);
+            ObjectMapper objectMapper = new ObjectMapper();
+            System.out.println(response.body());
+            System.out.println(CurrencyRate.class);
+            return objectMapper.readValue(response.body(), CurrencyRate[].class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        return null;
     }
 
 
