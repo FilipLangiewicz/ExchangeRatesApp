@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" prefHeight="400.0" prefWidth="370.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.pw.edu.mini.zpoif.Application.HelloController">
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.pw.edu.mini.zpoif.Application.HelloController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -21,11 +21,18 @@
             <Tab fx:id="tabela_button" text="tabela">
                 <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                  <children>
-                     <TableView fx:id="table" layoutY="6.0" prefHeight="284.0" prefWidth="242.0">
-
-                     </TableView>
-                  </children></AnchorPane>
+                            <TableView fx:id="tableView">
+                                <columns>
+                                    <TableColumn fx:id="firstColumn" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Nazwa" />
+                                    <TableColumn fx:id="secondColumn" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Kurs 5 dni temu" />
+                                    <TableColumn fx:id="thirdColumn" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Kurs obecny" />
+                                    <TableColumn fx:id="fourthColumn" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Zmiana w procentach" />
+                                </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                            </TableView>
+                    </AnchorPane>
                 </content>
             </Tab>
             <Tab fx:id="mapa_button" text="mapa">
