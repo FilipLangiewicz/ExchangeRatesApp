@@ -4,13 +4,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.pw.edu.mini.zpoif.Application.HelloController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-    </padding>
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.pw.edu.mini.zpoif.Application.HelloController">
 
     <Label fx:id="welcomeText" text="Cos tam tytul aplikacji" />
-    <TabPane prefHeight="382.0" prefWidth="330.0" tabClosingPolicy="UNAVAILABLE">
+    <TabPane prefHeight="700.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE" >
         <tabs>
             <Tab fx:id="start_button" text="start">
                 <content>
@@ -20,18 +18,17 @@
             </Tab>
             <Tab fx:id="tabela_button" text="tabela">
                 <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                            <TableView fx:id="tableView">
-                                <columns>
-                                    <TableColumn fx:id="firstColumn" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Nazwa" />
-                                    <TableColumn fx:id="secondColumn" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Kurs 5 dni temu" />
-                                    <TableColumn fx:id="thirdColumn" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Kurs obecny" />
-                                    <TableColumn fx:id="fourthColumn" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Zmiana w procentach" />
-                                </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                            </TableView>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="500.0">
+                        <TableView fx:id="tableView" prefHeight="700.0" prefWidth="900.0">
+                            <columns>
+                                <TableColumn fx:id="currency" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Currency" />
+                                <TableColumn fx:id="code" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Code" />
+                                <TableColumn fx:id="value" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Value" />
+                            </columns>
+                            <columnResizePolicy>
+                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                            </columnResizePolicy>
+                        </TableView>
                     </AnchorPane>
                 </content>
             </Tab>
@@ -48,4 +45,4 @@
             </Tab>
         </tabs>
     </TabPane>
-</VBox>
+</ScrollPane>

@@ -18,23 +18,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class Api {
     private final String linkTableA = "http://api.nbp.pl/api/exchangerates/tables/A/";
     private final String linkTableB = "http://api.nbp.pl/api/exchangerates/tables/B/";
-    private final String linkTableC = "http://api.nbp.pl/api/exchangerates/tables/C/";
 
 
     public CurrencyRate[] getApiData(HttpClient httpClient) {
         CurrencyRate[] tableA = importTableData(linkTableA, httpClient);
         CurrencyRate[] tableB = importTableData(linkTableB, httpClient);
-        CurrencyRate[] tableC = importTableData(linkTableC, httpClient);
-
-
-        return mergeTables(tableA, tableB, tableC);
+        return mergeTables(tableA, tableB);
     }
 
-    private CurrencyRate[] mergeTables(CurrencyRate[] tableA, CurrencyRate[] tableB, CurrencyRate[] tableC) {
-        return Stream.concat(
-                Stream.concat(Arrays.stream(tableA), Arrays.stream(tableB)),
-                Arrays.stream(tableC)
-        ).toArray(CurrencyRate[]::new);
+    private CurrencyRate[] mergeTables(CurrencyRate[] tableA, CurrencyRate[] tableB) {
+        return Stream.concat(Arrays.stream(tableA), Arrays.stream(tableB)).toArray(CurrencyRate[]::new);
     }
 
     private CurrencyRate[] importTableData(String url, HttpClient httpClient) {
@@ -64,7 +57,6 @@ public class Api {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             System.out.println(response.body());
-            System.out.println(CurrencyRate.class);
             return objectMapper.readValue(response.body(), CurrencyRate[].class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
