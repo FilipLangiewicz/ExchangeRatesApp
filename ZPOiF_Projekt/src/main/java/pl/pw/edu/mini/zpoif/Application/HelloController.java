@@ -6,6 +6,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Side;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
@@ -36,6 +38,12 @@ import static java.lang.Math.round;
 public class HelloController implements Initializable {
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    private final double wartoscDomyslnaMonet = 100;
+    private final double wartoscDomyslnaChleb = 4;
+    private final double wartoscDomyslnaBasen = 15;
+    private final double wartoscDomyslnaKetchup = 5;
+    private final double wartoscDomyslnaWalutJajko = 1;
+    private final double wartoscDomyslnaWalutPiwo = 3;
     @FXML
     private Label welcomeText;
     @FXML
@@ -58,15 +66,27 @@ public class HelloController implements Initializable {
     private CheckComboBox<Rate> currencyChoiceBox;
     @FXML
     private LineChart<String, Number> wykresPorownanie;
+    @FXML
+    private ChoiceBox<Rate> ileCzegoCheckBox;
+    @FXML
+    private BarChart<String, Number> ileCzegoPlot;
+    @FXML
+    private Button ileCzegoButton;
+
     private final HttpClient httpClient = HttpClient.newBuilder().build();
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         HttpClient httpClient = HttpClient.newBuilder().build();
         Api api = new Api();
         CurrencyRate[] data = api.getApiData(httpClient, "http://api.nbp.pl/api/exchangerates/tables/A/", "http://api.nbp.pl/api/exchangerates/tables/B/");
+
+        //////////////// tworzenie tabelki //////////
         ObservableList<Table> table2 = FXCollections.observableArrayList();
         getTableData(data, table2);
         setTable(table2);
+
+
+        //////////////// tworzenie porownania walut //////////
 
         setChoiceBoxProperties(data);
         buttonPorownaj.setOnAction(actionEvent -> {
@@ -90,7 +110,14 @@ public class HelloController implements Initializable {
             buttonPorownaj.setText("Porównaj waluty");
         });
 
+
+        //////////////// tworzenie ileCzego //////////
+        //ileCzego ileCzegoButton ileCzegoCheckBox ileCzegoPlot
+        ileCzegoButton.setOnAction(actionEvent -> {
+        });
     }
+
+
 
     private XYChart.Series<String, Number> processPlotData(PlotData chartData) {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
@@ -152,10 +179,9 @@ public class HelloController implements Initializable {
             }
         }
     }
+
     private double round(double d) {
-        String numer = String.format("%.4f", d);
-        double numer2 = Double.parseDouble(numer);
-        return numer2;
+        return Math.round(d * 10000.0) / 10000.0;
     }
 
     private String formatDate(Date date) {
