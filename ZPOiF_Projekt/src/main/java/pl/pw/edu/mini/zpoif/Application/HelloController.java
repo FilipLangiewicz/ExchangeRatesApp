@@ -10,6 +10,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.shape.Circle;
 import org.controlsfx.control.CheckComboBox;
 import pl.pw.edu.mini.zpoif.Api.Api;
 import pl.pw.edu.mini.zpoif.Api.CurrencyRate;
@@ -66,6 +67,7 @@ public class HelloController implements Initializable {
         ObservableList<Table> table2 = FXCollections.observableArrayList();
         getTableData(data, table2);
         setTable(table2);
+
         setChoiceBoxProperties(data);
         buttonPorownaj.setOnAction(actionEvent -> {
 
@@ -78,7 +80,8 @@ public class HelloController implements Initializable {
             wykresPorownanie.setTitle("Kursy wybranych walut między " + startDate.format(dateTimeFormatter) + " a "
                     + endDate.format(dateTimeFormatter));
             for (Rate selectedRate : rates) {
-                PlotData plotData = getPlotData(startDate, endDate, selectedRate, true);
+                boolean isARate = data[0].getRates().contains(selectedRate);
+                PlotData plotData = getPlotData(startDate, endDate, selectedRate, isARate);
                 if (plotData == null) return;
                 XYChart.Series<String, Number> series = processPlotData(plotData);
                 wykresPorownanie.getData().add(series);
@@ -141,7 +144,7 @@ public class HelloController implements Initializable {
             List<Rate> rates = currencyRates[num].getRates();
             for (int i = 0; i < rates.size(); i++) {
                 Rate rate2 = currencyRates[num].getRates().get(i);
-                double rate = rate2.getMid();
+                double rate = round(rate2.getMid());
                 String name = rate2.getCurrency();
                 Date date = currencyRates[num].getEffectiveDate();
                 String formattedDate = formatDate(date);
@@ -149,12 +152,19 @@ public class HelloController implements Initializable {
             }
         }
     }
+    private double round(double d) {
+        String numer = String.format("%.4f", d);
+        double numer2 = Double.parseDouble(numer);
+        return numer2;
+    }
+
     private String formatDate(Date date) {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String formattedDate = simpleDateFormat.format(date);
         return formattedDate;
     }
+
     private void setTable(ObservableList<Table> table2) {
         currency.prefWidthProperty().bind(table.widthProperty().multiply(0.334));
         date.prefWidthProperty().bind(table.widthProperty().multiply(0.333));
