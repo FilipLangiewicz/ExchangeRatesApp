@@ -21,20 +21,20 @@ public class Api {
     private String link1;
     private String link2;
 
-    public CurrencyRate[] getApiData(HttpClient httpClient, String link1, String link2) {
+    public static CurrencyRate[] getApiData(HttpClient httpClient, String link1, String link2) {
         CurrencyRate[] tableA = importTableData(link1, httpClient);
         CurrencyRate[] tableB = importTableData(link2, httpClient);
         return mergeTables(tableA, tableB);
     }
-    public CurrencyRate[] getApiData(HttpClient httpClient, String link1) {
+    public static CurrencyRate[] getApiData(HttpClient httpClient, String link1) {
         return importTableData(link1, httpClient);
     }
 
-    private CurrencyRate[] mergeTables(CurrencyRate[] tableA, CurrencyRate[] tableB) {
+    private static CurrencyRate[] mergeTables(CurrencyRate[] tableA, CurrencyRate[] tableB) {
         return Stream.concat(Arrays.stream(tableA), Arrays.stream(tableB)).toArray(CurrencyRate[]::new);
     }
 
-    private CurrencyRate[] importTableData(String url, HttpClient httpClient) {
+    private static CurrencyRate[] importTableData(String url, HttpClient httpClient) {
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .header("Accept", "application/json")
                 .uri(URI.create(url))
@@ -57,7 +57,7 @@ public class Api {
     }
 
 
-    private CurrencyRate[] readResponseAndMap(HttpResponse<String> response){
+    private static CurrencyRate[] readResponseAndMap(HttpResponse<String> response){
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.readValue(response.body(), CurrencyRate[].class);

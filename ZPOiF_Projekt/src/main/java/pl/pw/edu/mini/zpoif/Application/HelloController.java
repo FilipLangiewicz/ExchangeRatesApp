@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.controlsfx.control.CheckComboBox;
@@ -16,6 +17,8 @@ import pl.pw.edu.mini.zpoif.Api.Table;
 import java.net.URL;
 import java.net.http.HttpClient;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -23,6 +26,8 @@ import java.util.ResourceBundle;
 import static java.lang.Math.round;
 
 public class HelloController implements Initializable {
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
     @FXML
     private Label welcomeText;
     @FXML
@@ -36,19 +41,15 @@ public class HelloController implements Initializable {
 
     //private CheckComboBox<Rate> currencyChoiceBox;
     @FXML
-    private Button generateButton;
+    private Button buttonPorownaj;
     @FXML
-    private DatePicker datePicker;
+    private DatePicker endDateButton;
     @FXML
-    private DatePicker datePicker1;
-    @FXML
-    private DatePicker endDatePicker;
-    @FXML
-    private DatePicker endDatePicker1;
+    private DatePicker startDateButton;
     @FXML
     private CheckComboBox<Rate> currencyChoiceBox;
     @FXML
-    private LineChart<String, Number> currencyChart;
+    private LineChart<String, Number> wykresPorownanie;
     private final HttpClient httpClient = HttpClient.newBuilder().build();
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -59,6 +60,25 @@ public class HelloController implements Initializable {
         getTableData(data, table2);
         setTable(table2);
         setChoiceBoxProperties(data);
+        buttonPorownaj.setOnAction(actionEvent -> {
+            ObservableList<Rate> rates = currencyChoiceBox.getCheckModel().getCheckedItems();
+            //if (!validateRates(rates)) return;
+            LocalDate endDate = endDateButton.getValue();
+            LocalDate startDate = startDateButton.getValue();
+            //if (!validateDates(startDate, endDate)) return;
+            wykresPorownanie.getData().clear();
+            wykresPorownanie.setTitle("Porównananie kursu walut między " + startDate.format(dateTimeFormatter) + " a "
+                    + endDate.format(dateTimeFormatter));
+            for (Rate selectedRate : rates) {
+                Rate chartData = fetchChartData(startDate, endDate, selectedRate, true);
+                if (chartData == null) return;
+                XYChart.Series<String, Number> series = processChartData(chartData);
+                currencyChart.getData().add(series);
+            }
+            currencyChart.setVisible(true);
+            generateButton.setText("Generuj wykres");
+        });
+
     }
     private void getTableData(CurrencyRate[] currencyRates, ObservableList<Table> tableData) {
         for(int num=0; num<currencyRates.length; num++){
