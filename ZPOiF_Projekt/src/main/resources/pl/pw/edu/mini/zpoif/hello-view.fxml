@@ -8,7 +8,7 @@
 
 <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.pw.edu.mini.zpoif.Application.HelloController">
 
-    <TabPane prefHeight="700.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE">
+    <TabPane prefHeight="700.0" prefWidth="973.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
             <Tab fx:id="start_button" text="start">
                 <content>
@@ -32,10 +32,10 @@
                 <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="600.0">
                   <children>
-                     <DatePicker fx:id="startDateButton" layoutX="550.0" layoutY="65.0" />
-                     <DatePicker fx:id="endDateButton" layoutX="550.0" layoutY="105.0" />
-                     <CheckComboBox fx:id="currencyChoiceBox" layoutX="550.0" layoutY="142.0" prefHeight="21.0" prefWidth="176.0" />
-                      <LineChart fx:id="wykresPorownanie" layoutX="270.0" layoutY="185.0" prefHeight="400.0" prefWidth="825.0" title="Porównanie walut">
+                     <DatePicker fx:id="startDateButton" layoutX="638.0" layoutY="68.0" />
+                     <DatePicker fx:id="endDateButton" layoutX="638.0" layoutY="104.0" />
+                     <CheckComboBox fx:id="currencyChoiceBox" layoutX="638.0" layoutY="142.0" prefHeight="21.0" prefWidth="176.0" />
+                      <LineChart fx:id="wykresPorownanie" layoutX="313.0" layoutY="183.0" prefHeight="400.0" prefWidth="825.0" title="Porównanie walut">
                        <xAxis>
                          <CategoryAxis side="BOTTOM" />
                        </xAxis>
@@ -45,7 +45,7 @@
                      </LineChart>
 
                      <Button fx:id="buttonPorownaj" layoutX="1000.0" layoutY="191.0" mnemonicParsing="false" text="Porównaj waluty" />
-                      <Text fx:id="linePlotTekst" fill="#161616" layoutX="370.0" layoutY="26.0" rotate="0.0" stroke="#161515" strokeType="OUTSIDE" strokeWidth="0.0" text="Wykres porównujący waluty na przestrzeni czasu." textAlignment="CENTER" wrappingWidth="427.90728759765625">
+                      <Text fx:id="linePlotTekst" fill="#161616" layoutX="512.0" layoutY="30.0" rotate="0.0" stroke="#161515" strokeType="OUTSIDE" strokeWidth="0.0" text="Wykres porównujący waluty na przestrzeni czasu." textAlignment="CENTER" wrappingWidth="427.90728759765625">
                         <font>
                            <Font name="Arial Black" size="21.0" />
                         </font>
@@ -67,7 +67,7 @@
                          <NumberAxis side="LEFT" />
                        </yAxis>
                      </BarChart>
-                     <Text fx:id="ileCzegoWelcomeText" fill="#161616" layoutX="280.0" layoutY="40.0" rotate="0.0" stroke="#161515" strokeType="OUTSIDE" strokeWidth="0.0" text="Porównaj, ile produktów możesz kupić w Polsce za 100 monet wybranej waluty." textAlignment="CENTER">
+                     <Text fx:id="ileCzegoWelcomeText" fill="#161616" layoutX="288.0" layoutY="37.0" rotate="0.0" stroke="#161515" strokeType="OUTSIDE" strokeWidth="0.0" text="Porównaj, ile produktów możesz kupić w Polsce za 100 monet wybranej waluty." textAlignment="CENTER">
                         <font>
                            <Font name="Arial Black" size="21.0" />
                         </font>
