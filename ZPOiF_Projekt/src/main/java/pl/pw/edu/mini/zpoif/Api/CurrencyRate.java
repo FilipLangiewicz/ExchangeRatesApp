@@ -3,6 +3,7 @@ import com.fasterxml.jackson.annotation.*;
 
 import javax.annotation.processing.Generated;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class CurrencyRate {
     @JsonProperty("no")
     private String no;
     @JsonProperty("effectiveDate")
-    private String effectiveDate;
+    private Date effectiveDate;
     @JsonProperty("rates")
     private List<Rate> rates = null;
 
@@ -54,11 +55,11 @@ public class CurrencyRate {
         this.no = no;
     }
 
-    public String getEffectiveDate() {
+    public Date getEffectiveDate() {
         return effectiveDate;
     }
 
-    public void setEffectiveDate(String effectiveDate) {
+    public void setEffectiveDate(Date effectiveDate) {
         this.effectiveDate = effectiveDate;
     }
 
