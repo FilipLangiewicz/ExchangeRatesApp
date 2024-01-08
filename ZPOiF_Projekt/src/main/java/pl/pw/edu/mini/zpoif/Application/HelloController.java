@@ -28,10 +28,7 @@ import java.net.http.HttpResponse;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static java.lang.Math.round;
 
@@ -71,6 +68,7 @@ public class HelloController implements Initializable {
         setTable(table2);
         setChoiceBoxProperties(data);
         buttonPorownaj.setOnAction(actionEvent -> {
+
             ObservableList<Rate> rates = currencyChoiceBox.getCheckModel().getCheckedItems();
             //if (!validateRates(rates)) return;
             LocalDate endDate = endDateButton.getValue();
@@ -80,9 +78,9 @@ public class HelloController implements Initializable {
             wykresPorownanie.setTitle("Kursy wybranych walut między " + startDate.format(dateTimeFormatter) + " a "
                     + endDate.format(dateTimeFormatter));
             for (Rate selectedRate : rates) {
-                PlotData chartData = getPlotData(startDate, endDate, selectedRate, true);
-                if (chartData == null) return;
-                XYChart.Series<String, Number> series = processChartData(chartData);
+                PlotData plotData = getPlotData(startDate, endDate, selectedRate, true);
+                if (plotData == null) return;
+                XYChart.Series<String, Number> series = processPlotData(plotData);
                 wykresPorownanie.getData().add(series);
             }
             wykresPorownanie.setVisible(true);
@@ -91,7 +89,7 @@ public class HelloController implements Initializable {
 
     }
 
-    private XYChart.Series<String, Number> processChartData(PlotData chartData) {
+    private XYChart.Series<String, Number> processPlotData(PlotData chartData) {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName(String.format("%s (%s)", chartData.getCurrency(), chartData.getCode()));
         for (RatePlot rate : chartData.getRates()) {
@@ -158,9 +156,9 @@ public class HelloController implements Initializable {
         return formattedDate;
     }
     private void setTable(ObservableList<Table> table2) {
-        currency.prefWidthProperty().bind(table.widthProperty().multiply(0.33));
-        date.prefWidthProperty().bind(table.widthProperty().multiply(0.33));
-        rate.prefWidthProperty().bind(table.widthProperty().multiply(0.33));
+        currency.prefWidthProperty().bind(table.widthProperty().multiply(0.334));
+        date.prefWidthProperty().bind(table.widthProperty().multiply(0.333));
+        rate.prefWidthProperty().bind(table.widthProperty().multiply(0.333));
         currency.setCellValueFactory(new PropertyValueFactory<>("currency"));
         date.setCellValueFactory(new PropertyValueFactory<>("date"));
         rate.setCellValueFactory(new PropertyValueFactory<>("rate"));
