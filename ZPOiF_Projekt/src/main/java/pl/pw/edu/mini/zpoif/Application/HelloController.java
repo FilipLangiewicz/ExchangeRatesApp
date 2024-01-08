@@ -51,7 +51,6 @@ public class HelloController implements Initializable {
         put("Jajko", wartoscDomyslnaJajko);
         put("Piwo", wartoscDomyslnaPiwo);
     }};
-    private Label welcomeText;
     @FXML
     private TableView<Table> table;
     @FXML
@@ -122,7 +121,7 @@ public class HelloController implements Initializable {
         //////////////// tworzenie ileCzego //////////
         //ileCzego ileCzegoButton ileCzegoCheckBox ileCzegoPlot
         setCheckBoxProperties(data);
-
+        ileCzegoButton.setText("Przelicz");
         ileCzegoButton.setOnAction(actionEvent -> {
             Rate rate = ileCzegoCheckBox.getValue();
             //if (!validateRates(rates)) return;
@@ -133,12 +132,7 @@ public class HelloController implements Initializable {
                 series.setName(entry.getKey());
                 series.getData().add(new XYChart.Data<>(entry.getKey(), round(wartoscDomyslnaMonet * rate.getMid() / entry.getValue())));
                 ileCzegoPlot.getData().add(series);
-                for (Node node : series.getNode().lookupAll(".bar")) {
-                    if (node instanceof Rectangle) {
-                        Rectangle bar = (Rectangle) node;
-                        bar.setWidth(3);  // Ustawienie szerokości słupka na większą wartość
-                    }
-                }
+
             }
 //            for () {
 //                boolean isARate = data[0].getRates().contains(selectedRate);
@@ -148,7 +142,6 @@ public class HelloController implements Initializable {
 //                wykresPorownanie.getData().add(series);
 //            }
             ileCzegoPlot.setVisible(true);
-            ileCzegoButton.setText("Porównaj waluty");
         });
     }
 

@@ -32,10 +32,10 @@
                 <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="600.0">
                   <children>
-                     <DatePicker fx:id="startDateButton" layoutX="361.0" layoutY="53.0" />
-                     <DatePicker fx:id="endDateButton" layoutX="361.0" layoutY="95.0" />
-                     <CheckComboBox fx:id="currencyChoiceBox" layoutX="360.0" layoutY="142.0" prefHeight="21.0" prefWidth="176.0" />
-                      <LineChart fx:id="wykresPorownanie" layoutX="38.0" layoutY="185.0" prefHeight="400.0" prefWidth="825.0" title="Porównanie walut">
+                     <DatePicker fx:id="startDateButton" layoutX="550.0" layoutY="65.0" />
+                     <DatePicker fx:id="endDateButton" layoutX="550.0" layoutY="105.0" />
+                     <CheckComboBox fx:id="currencyChoiceBox" layoutX="550.0" layoutY="142.0" prefHeight="21.0" prefWidth="176.0" />
+                      <LineChart fx:id="wykresPorownanie" layoutX="270.0" layoutY="185.0" prefHeight="400.0" prefWidth="825.0" title="Porównanie walut">
                        <xAxis>
                          <CategoryAxis side="BOTTOM" />
                        </xAxis>
@@ -44,12 +44,12 @@
                        </yAxis>
                      </LineChart>
 
-                     <Button fx:id="buttonPorownaj" layoutX="695.0" layoutY="191.0" mnemonicParsing="false" text="Porównaj waluty" />
-                     <TextField fx:id="tekstLinePlot" alignment="BOTTOM_CENTER" editable="false" layoutX="260.0" layoutY="-8.0" prefHeight="44.0" prefWidth="381.0" promptText="Wykres porównujący waluty na przestrzeni czasu">
+                     <Button fx:id="buttonPorownaj" layoutX="1000.0" layoutY="191.0" mnemonicParsing="false" text="Porównaj waluty" />
+                      <Text fx:id="linePlotTekst" fill="#161616" layoutX="370.0" layoutY="26.0" rotate="0.0" stroke="#161515" strokeType="OUTSIDE" strokeWidth="0.0" text="Wykres porównujący waluty na przestrzeni czasu." textAlignment="CENTER" wrappingWidth="427.90728759765625">
                         <font>
-                           <Font name="Arial Black" size="13.0" />
+                           <Font name="Arial Black" size="21.0" />
                         </font>
-                     </TextField>
+                     </Text>
                   </children></AnchorPane>
                 </content>
             </Tab>
@@ -57,9 +57,9 @@
                 <content>
                     <AnchorPane fx:id="ileCzego" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                   <children>
-                     <ChoiceBox fx:id="ileCzegoCheckBox" layoutX="203.0" layoutY="72.0" prefWidth="150.0" />
-                     <Button fx:id="ileCzegoButton" layoutX="75.0" layoutY="72.0" mnemonicParsing="false" text="Button" />
-                     <BarChart fx:id="ileCzegoPlot" layoutX="75.0" layoutY="155.0" prefHeight="258.0" prefWidth="300.0">
+                     <ChoiceBox fx:id="ileCzegoCheckBox" layoutX="630.0" layoutY="90.0" prefWidth="150.0" />
+                     <Button fx:id="ileCzegoButton" layoutX="780.0" layoutY="90.0" mnemonicParsing="false" text="Button" />
+                     <BarChart fx:id="ileCzegoPlot" layoutX="270.0" layoutY="155.0" prefHeight="400.0" prefWidth="825.0">
                        <xAxis>
                          <CategoryAxis side="BOTTOM" />
                        </xAxis>
@@ -67,6 +67,11 @@
                          <NumberAxis side="LEFT" />
                        </yAxis>
                      </BarChart>
+                     <Text fx:id="ileCzegoWelcomeText" fill="#161616" layoutX="280.0" layoutY="40.0" rotate="0.0" stroke="#161515" strokeType="OUTSIDE" strokeWidth="0.0" text="Porównaj, ile produktów możesz kupić w Polsce za 100 monet wybranej waluty." textAlignment="CENTER">
+                        <font>
+                           <Font name="Arial Black" size="21.0" />
+                        </font>
+                     </Text>
                   </children></AnchorPane>
                 </content>
             </Tab>
