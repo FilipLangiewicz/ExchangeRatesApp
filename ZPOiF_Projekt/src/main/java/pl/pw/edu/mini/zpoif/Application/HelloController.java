@@ -1,5 +1,7 @@
 package pl.pw.edu.mini.zpoif.Application;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,12 +15,20 @@ import pl.pw.edu.mini.zpoif.Api.Api;
 import pl.pw.edu.mini.zpoif.Api.CurrencyRate;
 import pl.pw.edu.mini.zpoif.Api.Rate;
 import pl.pw.edu.mini.zpoif.Api.Table;
+import pl.pw.edu.mini.zpoif.plotData.PlotData;
+import pl.pw.edu.mini.zpoif.plotData.RatePlot;
 
+import java.io.IOException;
+import java.net.ConnectException;
+import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -26,7 +36,7 @@ import java.util.ResourceBundle;
 import static java.lang.Math.round;
 
 public class HelloController implements Initializable {
-    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @FXML
     private Label welcomeText;
@@ -70,16 +80,62 @@ public class HelloController implements Initializable {
             wykresPorownanie.setTitle("Porównananie kursu walut między " + startDate.format(dateTimeFormatter) + " a "
                     + endDate.format(dateTimeFormatter));
             for (Rate selectedRate : rates) {
-                Rate chartData = fetchChartData(startDate, endDate, selectedRate, true);
+                PlotData chartData = fetchChartData(startDate, endDate, selectedRate, true);
                 if (chartData == null) return;
                 XYChart.Series<String, Number> series = processChartData(chartData);
-                currencyChart.getData().add(series);
+                wykresPorownanie.getData().add(series);
             }
-            currencyChart.setVisible(true);
-            generateButton.setText("Generuj wykres");
+            wykresPorownanie.setVisible(true);
+            buttonPorownaj.setText("Generuj wykres");
         });
 
     }
+
+    private XYChart.Series<String, Number> processChartData(PlotData chartData) {
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName(String.format("%s (%s)", chartData.getCurrency(), chartData.getCode()));
+        for (RatePlot rate : chartData.getRates()) {
+            series.getData().add(new XYChart.Data<>(rate.getEffectiveDate(), rate.getMid()));
+        }
+        series.getData().sort(Comparator.comparing(XYChart.Data::getXValue));
+        return series;
+    }
+
+    private PlotData fetchChartData(LocalDate startDate, LocalDate endDate, Rate selectedRate, boolean isARate) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Błąd");
+        HttpRequest chartRequest = HttpRequest.newBuilder()
+                .header("Accept", "application/json")
+                .uri(URI.create(String.format("http://api.nbp.pl/api/exchangerates/rates/%s/%s/%s/%s/",
+                        isARate ? "A" : "B",
+                        selectedRate.getCode(),
+                        startDate.format(dateTimeFormatter),
+                        endDate.format(dateTimeFormatter))))
+                .build();
+        HttpResponse<String> chartResponse;
+        buttonPorownaj.setText("Ładowanie...");
+        try {
+            chartResponse = httpClient.send(chartRequest, HttpResponse.BodyHandlers.ofString());
+        } catch (ConnectException ex) {
+            alert.setHeaderText("Brak internetu");
+            alert.setContentText("Sprawdź połączenie internetowe");
+            alert.showAndWait();
+            buttonPorownaj.setText("Generuj wykres");
+            return null;
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        ObjectMapper chartMapper = new ObjectMapper();
+        PlotData chartData;
+        try {
+            chartData = chartMapper.readValue(chartResponse.body(), PlotData.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return chartData;
+    }
+
     private void getTableData(CurrencyRate[] currencyRates, ObservableList<Table> tableData) {
         for(int num=0; num<currencyRates.length; num++){
             List<Rate> rates = currencyRates[num].getRates();
