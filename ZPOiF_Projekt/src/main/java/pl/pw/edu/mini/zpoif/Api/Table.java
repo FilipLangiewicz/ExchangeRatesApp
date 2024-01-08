@@ -4,10 +4,10 @@ import java.util.Date;
 
 public class Table {
     private String currency;
-    private Date date;
+    private String date;
     private double rate;
 
-    public Table(String currency, Date date, double rate) {
+    public Table(String currency, String date, double rate) {
         this.currency = currency;
         this.rate = rate;
         this.date = date;
@@ -21,11 +21,11 @@ public class Table {
         this.currency = currency;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

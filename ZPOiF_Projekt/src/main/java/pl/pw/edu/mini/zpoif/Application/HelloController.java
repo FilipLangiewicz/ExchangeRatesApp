@@ -15,6 +15,7 @@ import pl.pw.edu.mini.zpoif.Api.Table;
 
 import java.net.URL;
 import java.net.http.HttpClient;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -37,20 +38,29 @@ public class HelloController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         HttpClient httpClient = HttpClient.newBuilder().build();
         Api api = new Api();
-        CurrencyRate[] data = api.getApiData(httpClient);
+        CurrencyRate[] data = api.getApiData(httpClient, "http://api.nbp.pl/api/exchangerates/tables/A/", "http://api.nbp.pl/api/exchangerates/tables/B/");
         ObservableList<Table> table2 = FXCollections.observableArrayList();
         getTableData(data, table2);
         setTable(table2);
     }
     private void getTableData(CurrencyRate[] currencyRates, ObservableList<Table> tableData) {
-        List<Rate> rates = currencyRates[0].getRates();
-        for (int i = 0; i < rates.size(); i++) {
-            Rate rate2 = currencyRates[0].getRates().get(i);
-            double rate = rate2.getMid();
-            String name = rate2.getCurrency();
-            Date date = currencyRates[0].getEffectiveDate();
-            tableData.add(new Table(name, date, rate));
+        for(int num=0; num<currencyRates.length; num++){
+            List<Rate> rates = currencyRates[num].getRates();
+            for (int i = 0; i < rates.size(); i++) {
+                Rate rate2 = currencyRates[num].getRates().get(i);
+                double rate = rate2.getMid();
+                String name = rate2.getCurrency();
+                Date date = currencyRates[num].getEffectiveDate();
+                String formattedDate = formatDate(date);
+                tableData.add(new Table(name, formattedDate, rate));
+            }
         }
+    }
+    private String formatDate(Date date) {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String formattedDate = simpleDateFormat.format(date);
+        return formattedDate;
     }
     private void setTable(ObservableList<Table> table2) {
         currency.prefWidthProperty().bind(table.widthProperty().multiply(0.33));
@@ -61,4 +71,5 @@ public class HelloController implements Initializable {
         rate.setCellValueFactory(new PropertyValueFactory<>("rate"));
         table.setItems(table2);
     }
+
 }
