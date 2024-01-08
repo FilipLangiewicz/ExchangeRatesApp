@@ -4,10 +4,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.chart.LineChart;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.controlsfx.control.CheckComboBox;
 import pl.pw.edu.mini.zpoif.Api.Api;
 import pl.pw.edu.mini.zpoif.Api.CurrencyRate;
 import pl.pw.edu.mini.zpoif.Api.Rate;
@@ -33,6 +33,22 @@ public class HelloController implements Initializable {
     private TableColumn<Table, Date> date;
     @FXML
     private TableColumn<Table, Double> rate;
+
+    //private CheckComboBox<Rate> currencyChoiceBox;
+    @FXML
+    private Button generateButton;
+    @FXML
+    private DatePicker datePicker;
+    @FXML
+    private DatePicker datePicker1;
+    @FXML
+    private DatePicker endDatePicker;
+    @FXML
+    private DatePicker endDatePicker1;
+    @FXML
+    private CheckComboBox<Rate> currencyChoiceBox;
+    @FXML
+    private LineChart<String, Number> currencyChart;
     private final HttpClient httpClient = HttpClient.newBuilder().build();
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -42,6 +58,7 @@ public class HelloController implements Initializable {
         ObservableList<Table> table2 = FXCollections.observableArrayList();
         getTableData(data, table2);
         setTable(table2);
+        setChoiceBoxProperties(data);
     }
     private void getTableData(CurrencyRate[] currencyRates, ObservableList<Table> tableData) {
         for(int num=0; num<currencyRates.length; num++){
@@ -70,6 +87,19 @@ public class HelloController implements Initializable {
         date.setCellValueFactory(new PropertyValueFactory<>("date"));
         rate.setCellValueFactory(new PropertyValueFactory<>("rate"));
         table.setItems(table2);
+    }
+
+    private void setChoiceBoxProperties(CurrencyRate[] currencyRates) {
+        if (currencyRates != null) {
+            currencyChoiceBox.getItems().addAll(FXCollections.observableArrayList(currencyRates[0].getRates()));
+            currencyChoiceBox.getItems().addAll(FXCollections.observableArrayList(currencyRates[1].getRates()));
+            Rate defaultRate = new Rate();
+            defaultRate.setCode("PLN");
+            defaultRate.setCurrency("złoty polski");
+            defaultRate.setMid(1.00);
+            currencyChoiceBox.getItems().add(defaultRate);
+        }
+
     }
 
 }

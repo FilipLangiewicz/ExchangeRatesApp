@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.pw.edu.mini.zpoif.Application.HelloController">
+<?import org.controlsfx.control.CheckComboBox?>
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.pw.edu.mini.zpoif.Application.HelloController">
 
     <Label fx:id="welcomeText" text="Cos tam tytul aplikacji" />
-    <TabPane prefHeight="700.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE" >
+    <TabPane prefHeight="700.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
             <Tab fx:id="start_button" text="start">
                 <content>
@@ -35,12 +34,21 @@
             <Tab fx:id="porownanie_walut_button" text="Porównanie walut">
                 <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                    </AnchorPane>
+                  <children>
+                     <DatePicker fx:id="startDateButton" layoutX="299.0" layoutY="53.0" />
+                     <TextArea fx:id="tekst_porownanie" layoutX="150.0" layoutY="14.0" prefHeight="24.0" prefWidth="117.0" text="Porównaj waluty" />
+                     <DatePicker fx:id="endDateButton" layoutX="299.0" layoutY="98.0" />
+                     <CheckComboBox fx:id="currencyChoiceBox" layoutX="299.0" layoutY="141.0" prefHeight="21.0" prefWidth="176.0" />
+                  </children></AnchorPane>
                 </content>
             </Tab>
             <Tab text="cos tam">
                 <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                  <children>
+                     <ComboBox layoutX="154.0" layoutY="39.0" prefWidth="150.0" />
+                     <ChoiceBox layoutX="169.0" layoutY="106.0" prefWidth="150.0" />
+                  </children></AnchorPane>
                 </content>
             </Tab>
         </tabs>
