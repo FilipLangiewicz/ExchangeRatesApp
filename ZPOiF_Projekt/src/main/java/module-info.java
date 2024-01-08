@@ -11,5 +11,6 @@ module com.example.zpoif_projekt {
     opens pl.pw.edu.mini.zpoif to javafx.fxml;
     exports pl.pw.edu.mini.zpoif.Api;
     exports pl.pw.edu.mini.zpoif.Application;
+    exports pl.pw.edu.mini.zpoif.plotData;
     opens pl.pw.edu.mini.zpoif.Application to javafx.fxml;
 }

@@ -77,16 +77,16 @@ public class HelloController implements Initializable {
             LocalDate startDate = startDateButton.getValue();
             //if (!validateDates(startDate, endDate)) return;
             wykresPorownanie.getData().clear();
-            wykresPorownanie.setTitle("Porównananie kursu walut między " + startDate.format(dateTimeFormatter) + " a "
+            wykresPorownanie.setTitle("Kursy wybranych walut między " + startDate.format(dateTimeFormatter) + " a "
                     + endDate.format(dateTimeFormatter));
             for (Rate selectedRate : rates) {
-                PlotData chartData = fetchChartData(startDate, endDate, selectedRate, true);
+                PlotData chartData = getPlotData(startDate, endDate, selectedRate, true);
                 if (chartData == null) return;
                 XYChart.Series<String, Number> series = processChartData(chartData);
                 wykresPorownanie.getData().add(series);
             }
             wykresPorownanie.setVisible(true);
-            buttonPorownaj.setText("Generuj wykres");
+            buttonPorownaj.setText("Porównaj waluty");
         });
 
     }
@@ -101,39 +101,41 @@ public class HelloController implements Initializable {
         return series;
     }
 
-    private PlotData fetchChartData(LocalDate startDate, LocalDate endDate, Rate selectedRate, boolean isARate) {
+    private PlotData getPlotData(LocalDate startDate, LocalDate endDate, Rate selectedRate, boolean isARate) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Błąd");
+        String link = String.format("http://api.nbp.pl/api/exchangerates/rates/%s/%s/%s/%s/",
+                isARate ? "A" : "B",
+                selectedRate.getCode(),
+                startDate.format(dateTimeFormatter),
+                endDate.format(dateTimeFormatter));
+
         HttpRequest chartRequest = HttpRequest.newBuilder()
                 .header("Accept", "application/json")
-                .uri(URI.create(String.format("http://api.nbp.pl/api/exchangerates/rates/%s/%s/%s/%s/",
-                        isARate ? "A" : "B",
-                        selectedRate.getCode(),
-                        startDate.format(dateTimeFormatter),
-                        endDate.format(dateTimeFormatter))))
+                .uri(URI.create(link))
                 .build();
         HttpResponse<String> chartResponse;
-        buttonPorownaj.setText("Ładowanie...");
+        buttonPorownaj.setText("Tworzenie wykresu...");
         try {
             chartResponse = httpClient.send(chartRequest, HttpResponse.BodyHandlers.ofString());
         } catch (ConnectException ex) {
             alert.setHeaderText("Brak internetu");
             alert.setContentText("Sprawdź połączenie internetowe");
             alert.showAndWait();
-            buttonPorownaj.setText("Generuj wykres");
+            buttonPorownaj.setText("Porównaj waluty");
             return null;
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
 
         ObjectMapper chartMapper = new ObjectMapper();
-        PlotData chartData;
+        PlotData plotData;
         try {
-            chartData = chartMapper.readValue(chartResponse.body(), PlotData.class);
+            plotData = chartMapper.readValue(chartResponse.body(), PlotData.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        return chartData;
+        return plotData;
     }
 
     private void getTableData(CurrencyRate[] currencyRates, ObservableList<Table> tableData) {
