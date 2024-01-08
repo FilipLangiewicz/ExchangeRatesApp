@@ -6,13 +6,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Side;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.shape.Circle;
 import org.controlsfx.control.CheckComboBox;
 import pl.pw.edu.mini.zpoif.Api.Api;
 import pl.pw.edu.mini.zpoif.Api.CurrencyRate;
@@ -42,9 +40,15 @@ public class HelloController implements Initializable {
     private final double wartoscDomyslnaChleb = 4;
     private final double wartoscDomyslnaBasen = 15;
     private final double wartoscDomyslnaKetchup = 5;
-    private final double wartoscDomyslnaWalutJajko = 1;
-    private final double wartoscDomyslnaWalutPiwo = 3;
-    @FXML
+    private final double wartoscDomyslnaJajko = 1;
+    private final double wartoscDomyslnaPiwo = 3;
+    private final Map<String , Double> produkty = new HashMap<String, Double>() {{
+        put("Chleb", wartoscDomyslnaChleb);
+        put("Basen", wartoscDomyslnaBasen);
+        put("Ketchup", wartoscDomyslnaKetchup);
+        put("Jajko", wartoscDomyslnaJajko);
+        put("Piwo", wartoscDomyslnaPiwo);
+    }};
     private Label welcomeText;
     @FXML
     private TableView<Table> table;
@@ -54,8 +58,6 @@ public class HelloController implements Initializable {
     private TableColumn<Table, Date> date;
     @FXML
     private TableColumn<Table, Double> rate;
-
-    //private CheckComboBox<Rate> currencyChoiceBox;
     @FXML
     private Button buttonPorownaj;
     @FXML
@@ -74,6 +76,10 @@ public class HelloController implements Initializable {
     private Button ileCzegoButton;
 
     private final HttpClient httpClient = HttpClient.newBuilder().build();
+
+    public HelloController() {
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         HttpClient httpClient = HttpClient.newBuilder().build();
@@ -113,7 +119,28 @@ public class HelloController implements Initializable {
 
         //////////////// tworzenie ileCzego //////////
         //ileCzego ileCzegoButton ileCzegoCheckBox ileCzegoPlot
+        setCheckBoxProperties(data);
+
         ileCzegoButton.setOnAction(actionEvent -> {
+            Rate rate = ileCzegoCheckBox.getValue();
+            //if (!validateRates(rates)) return;
+            ileCzegoPlot.getData().clear();
+            ileCzegoPlot.setTitle("Ile wybranych produktów jesteśmy w stanie kupić za 100 " + rate.getCode());
+            for (Map.Entry<String, Double> entry : produkty.entrySet()) {
+                XYChart.Series<String, Number> series = new XYChart.Series<>();
+                series.setName(entry.getKey());
+                series.getData().add(new XYChart.Data<>(entry.getKey(), round(wartoscDomyslnaMonet * rate.getMid() / entry.getValue())));
+                ileCzegoPlot.getData().add(series);
+            }
+//            for () {
+//                boolean isARate = data[0].getRates().contains(selectedRate);
+//                PlotData plotData = getPlotData(startDate, endDate, selectedRate, isARate);
+//                if (plotData == null) return;
+//                XYChart.Series<String, Number> series = processPlotData(plotData);
+//                wykresPorownanie.getData().add(series);
+//            }
+            ileCzegoPlot.setVisible(true);
+            ileCzegoButton.setText("Porównaj waluty");
         });
     }
 
@@ -202,16 +229,23 @@ public class HelloController implements Initializable {
     }
 
     private void setChoiceBoxProperties(CurrencyRate[] currencyRates) {
+        setBox(currencyRates, currencyChoiceBox.getItems());
+
+    }
+
+    private void setCheckBoxProperties(CurrencyRate[] currencyRates) {
+        setBox(currencyRates, ileCzegoCheckBox.getItems());
+    }
+
+    private void setBox(CurrencyRate[] currencyRates, ObservableList<Rate> items) {
         if (currencyRates != null) {
-            currencyChoiceBox.getItems().addAll(FXCollections.observableArrayList(currencyRates[0].getRates()));
-            currencyChoiceBox.getItems().addAll(FXCollections.observableArrayList(currencyRates[1].getRates()));
+            items.addAll(FXCollections.observableArrayList(currencyRates[0].getRates()));
+            items.addAll(FXCollections.observableArrayList(currencyRates[1].getRates()));
             Rate defaultRate = new Rate();
             defaultRate.setCode("PLN");
             defaultRate.setCurrency("złoty polski");
             defaultRate.setMid(1.00);
-            currencyChoiceBox.getItems().add(defaultRate);
+            items.add(defaultRate);
         }
-
     }
-
 }
