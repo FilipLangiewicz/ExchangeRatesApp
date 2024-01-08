@@ -6,11 +6,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.shape.Rectangle;
 import org.controlsfx.control.CheckComboBox;
 import pl.pw.edu.mini.zpoif.Api.Api;
 import pl.pw.edu.mini.zpoif.Api.CurrencyRate;
@@ -131,6 +133,12 @@ public class HelloController implements Initializable {
                 series.setName(entry.getKey());
                 series.getData().add(new XYChart.Data<>(entry.getKey(), round(wartoscDomyslnaMonet * rate.getMid() / entry.getValue())));
                 ileCzegoPlot.getData().add(series);
+                for (Node node : series.getNode().lookupAll(".bar")) {
+                    if (node instanceof Rectangle) {
+                        Rectangle bar = (Rectangle) node;
+                        bar.setWidth(3);  // Ustawienie szerokości słupka na większą wartość
+                    }
+                }
             }
 //            for () {
 //                boolean isARate = data[0].getRates().contains(selectedRate);

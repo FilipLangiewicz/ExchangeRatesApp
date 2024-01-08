@@ -35,8 +35,6 @@
                      <DatePicker fx:id="startDateButton" layoutX="361.0" layoutY="53.0" />
                      <DatePicker fx:id="endDateButton" layoutX="361.0" layoutY="95.0" />
                      <CheckComboBox fx:id="currencyChoiceBox" layoutX="360.0" layoutY="142.0" prefHeight="21.0" prefWidth="176.0" />
-                      <StackPane xmlns="http://javafx.com/javafx"
-                                 xmlns:fx="http://javafx.com/fxml" prefHeight="600.0" prefWidth="800.0">
                       <LineChart fx:id="wykresPorownanie" layoutX="38.0" layoutY="185.0" prefHeight="400.0" prefWidth="825.0" title="Porównanie walut">
                        <xAxis>
                          <CategoryAxis side="BOTTOM" />
@@ -45,7 +43,7 @@
                          <NumberAxis side="LEFT" />
                        </yAxis>
                      </LineChart>
-                      </StackPane>
+
                      <Button fx:id="buttonPorownaj" layoutX="695.0" layoutY="191.0" mnemonicParsing="false" text="Porównaj waluty" />
                      <TextField fx:id="tekstLinePlot" alignment="BOTTOM_CENTER" editable="false" layoutX="260.0" layoutY="-8.0" prefHeight="44.0" prefWidth="381.0" promptText="Wykres porównujący waluty na przestrzeni czasu">
                         <font>
