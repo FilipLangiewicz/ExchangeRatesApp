@@ -1,6 +1,9 @@
 package pl.pw.edu.mini.zpoif.Api;
 
+import javafx.scene.control.Tab;
+
 import java.util.Date;
+import java.util.List;
 
 public class Table {
     private String currency;
@@ -36,4 +39,6 @@ public class Table {
     public void setRate(double rate) {
         this.rate = rate;
     }
+
+
 }

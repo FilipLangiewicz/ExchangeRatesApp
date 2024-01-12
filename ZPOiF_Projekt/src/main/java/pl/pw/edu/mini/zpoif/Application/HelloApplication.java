@@ -25,9 +25,5 @@ public class HelloApplication extends Application {
 
     public static void main(String[] args) {
         launch();
-        HttpClient httpClient = HttpClient.newBuilder().build();
-        Api api = new Api();
-        CurrencyRate[] data = api.getApiData(httpClient, "http://api.nbp.pl/api/exchangerates/tables/A/", "http://api.nbp.pl/api/exchangerates/tables/B/");
-        System.out.println(Arrays.stream(data).toArray().toString());
     }
 }

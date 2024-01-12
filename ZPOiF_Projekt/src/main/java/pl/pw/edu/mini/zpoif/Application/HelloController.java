@@ -11,8 +11,6 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.WorldMapView;
 import pl.pw.edu.mini.zpoif.Api.Api;
@@ -41,14 +39,14 @@ public class HelloController implements Initializable {
 
     private final double wartoscDomyslnaMonet = 100;
     private final double wartoscDomyslnaChleb = 4;
-    private final double wartoscDomyslnaBasen = 15;
-    private final double wartoscDomyslnaKetchup = 5;
+    private final double wartoscDomyslnaCzekolada = 6;
+    private final double wartoscDomyslnaZapalki = 0.5;
     private final double wartoscDomyslnaJajko = 1;
     private final double wartoscDomyslnaPiwo = 3;
     private final Map<String , Double> produkty = new HashMap<String, Double>() {{
         put("Chleb", wartoscDomyslnaChleb);
-        put("Basen", wartoscDomyslnaBasen);
-        put("Ketchup", wartoscDomyslnaKetchup);
+        put("Czekolada", wartoscDomyslnaCzekolada);
+        put("Zapałki", wartoscDomyslnaZapalki);
         put("Jajko", wartoscDomyslnaJajko);
         put("Piwo", wartoscDomyslnaPiwo);
     }};
@@ -84,9 +82,6 @@ public class HelloController implements Initializable {
     private Label mapLabel;
     @FXML
     private Label mapValue;
-    @FXML
-    private ImageView countryFlag;
-
     private final HttpClient httpClient = HttpClient.newBuilder().build();
 
     public HelloController() {
@@ -94,18 +89,94 @@ public class HelloController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        CurrencyRate[] data = getCurrencyRatesData();
+
+        //////////////// tworzenie tabelki //////////
+        makeTable(data);
+
+        //////////////// tworzenie porownania walut //////////
+        makePorownaniaWalut(data);
+
+        //////////////// tworzenie ileCzego //////////
+        makeIleCzego(data);
+
+        //////////////// tworzenie mapy swiata //////////
+        makeWorldMap(data);
+
+    }
+
+    private static CurrencyRate[] getCurrencyRatesData() {
         HttpClient httpClient = HttpClient.newBuilder().build();
         Api api = new Api();
         CurrencyRate[] data = api.getApiData(httpClient, "http://api.nbp.pl/api/exchangerates/tables/A/", "http://api.nbp.pl/api/exchangerates/tables/B/");
+        return data;
+    }
 
-        //////////////// tworzenie tabelki //////////
-        ObservableList<Table> table2 = FXCollections.observableArrayList();
-        getTableData(data, table2);
-        setTable(table2);
+    private void makeWorldMap(CurrencyRate[] data) {
+        worldMap.setOnMouseClicked(mouseEvent -> {
+            ObservableList<WorldMapView.Country> countries = worldMap.getSelectedCountries();
+            if (countries.isEmpty()) {
+                krajLabel.setText("Wybierz kraj z mapy");
+                mapLabel.setText("");
+                mapValue.setText("");
+            } else {
+                setWorldMapLabels(data, countries);
+            }
+        });
 
+        makeWorldMapScrollable();
+    }
 
-        //////////////// tworzenie porownania walut //////////
+    private void setWorldMapLabels(CurrencyRate[] data, ObservableList<WorldMapView.Country> countries) {
+        Locale locale = new Locale("", countries.get(0).name());
+        krajLabel.setText(countries.get(0).getLocale().getDisplayCountry());
+        mapLabel.setText(Currency.getInstance(locale).getDisplayName(Locale.getDefault()));
+        String currencyCode = Currency.getInstance(locale).getCurrencyCode();
+        Optional<Double> rateValue = Optional.empty();
+        List<Rate> rates = data[0].getRates().stream().filter(r -> Objects.equals(r.getCode(), currencyCode)).toList();
+        if (!rates.isEmpty()) rateValue = Optional.ofNullable(rates.get(0).getMid());
+        List<Rate> rates2 = data[1].getRates().stream().filter(r -> Objects.equals(r.getCode(), currencyCode)).toList();
+        if (!rates2.isEmpty()) rateValue = Optional.ofNullable(rates2.get(0).getMid());
+        if (rateValue.isEmpty()) {
+            mapValue.setText("1,00");
+        } else {
+            mapValue.setText(String.format("%.2f", rateValue.get()));
+        }
+    }
 
+    private void makeWorldMapScrollable() {
+        worldMap.setOnScroll(scrollEvent -> {
+            double delta = scrollEvent.getDeltaY();
+            if (delta < 0) {
+                worldMap.setZoomFactor(worldMap.getZoomFactor() - 0.5);
+            } else {
+                worldMap.setZoomFactor(worldMap.getZoomFactor() + 0.5);
+            }
+            scrollEvent.consume();
+        });
+    }
+
+    private void makeIleCzego(CurrencyRate[] data) {
+        setCheckBoxProperties(data);
+        ileCzegoButton.setText("Przelicz");
+        ileCzegoButton.setOnAction(actionEvent -> {
+            Rate rate = ileCzegoCheckBox.getValue();
+            //if (!validateRates(rates)) return;
+            ileCzegoPlot.getData().clear();
+            ileCzegoPlot.setTitle("Ile wybranych produktów jesteśmy w stanie kupić za 100 " + rate.getCode());
+            for (Map.Entry<String, Double> entry : produkty.entrySet()) {
+                XYChart.Series<String, Number> series = new XYChart.Series<>();
+                series.setName(entry.getKey());
+                series.getData().add(new XYChart.Data<>(entry.getKey(), round(wartoscDomyslnaMonet * rate.getMid() / entry.getValue())));
+                ileCzegoPlot.getData().add(series);
+            }
+            ileCzegoPlot.setAnimated(false);
+            ileCzegoPlot.setBarGap(-100);
+            ileCzegoPlot.setVisible(true);
+        });
+    }
+
+    private void makePorownaniaWalut(CurrencyRate[] data) {
         setChoiceBoxProperties(data);
         buttonPorownaj.setOnAction(actionEvent -> {
 
@@ -128,57 +199,13 @@ public class HelloController implements Initializable {
             wykresPorownanie.setAnimated(false);
             buttonPorownaj.setText("Porównaj waluty");
         });
-
-
-        //////////////// tworzenie ileCzego //////////
-        //ileCzego ileCzegoButton ileCzegoCheckBox ileCzegoPlot
-        setCheckBoxProperties(data);
-        ileCzegoButton.setText("Przelicz");
-        ileCzegoButton.setOnAction(actionEvent -> {
-            Rate rate = ileCzegoCheckBox.getValue();
-            //if (!validateRates(rates)) return;
-            ileCzegoPlot.getData().clear();
-            ileCzegoPlot.setTitle("Ile wybranych produktów jesteśmy w stanie kupić za 100 " + rate.getCode());
-            for (Map.Entry<String, Double> entry : produkty.entrySet()) {
-                XYChart.Series<String, Number> series = new XYChart.Series<>();
-                series.setName(entry.getKey());
-                series.getData().add(new XYChart.Data<>(entry.getKey(), round(wartoscDomyslnaMonet * rate.getMid() / entry.getValue())));
-                ileCzegoPlot.getData().add(series);
-            }
-
-            ileCzegoPlot.setAnimated(false);
-            ileCzegoPlot.setBarGap(-100);
-            ileCzegoPlot.setVisible(true);
-        });
-
-        //////////////// tworzenie mapy swiata //////////
-
-        worldMap.setOnMouseClicked(mouseEvent -> {
-            ObservableList<WorldMapView.Country> countries = worldMap.getSelectedCountries();
-            if (countries.isEmpty()) {
-                krajLabel.setText("Wybierz kraj z mapy");
-                mapLabel.setText("");
-                mapValue.setText("");
-                countryFlag.setImage(null);
-            } else {
-                Locale locale = new Locale("", countries.get(0).name());
-                krajLabel.setText(countries.get(0).getLocale().getDisplayCountry());
-                mapLabel.setText(Currency.getInstance(locale).getDisplayName(Locale.getDefault()));
-                String currencyCode = Currency.getInstance(locale).getCurrencyCode();
-                Optional<Double> rateValue = Optional.empty();
-                if (table2 != null) {
-                    List<Rate> rates = table2[].getRates().stream().filter(r -> Objects.equals(r.getCode(), currencyCode)).toList();
-                    if (!rates.isEmpty()) rateValue = Optional.ofNullable(rates.get(0).getMid());
-                }
-                if (rateValue.isEmpty()) {
-                    mapValue.setText("Brak danych");
-                } else {
-                    mapValue.setText(String.format("%.2f", rateValue.get()));
-                }
-            }
-        });
     }
 
+    private void makeTable(CurrencyRate[] data) {
+        ObservableList<Table> table2 = FXCollections.observableArrayList();
+        getTableData(data, table2);
+        setTable(table2);
+    }
 
 
     private XYChart.Series<String, Number> processPlotData(PlotData chartData) {
@@ -218,6 +245,11 @@ public class HelloController implements Initializable {
             throw new RuntimeException(e);
         }
 
+        PlotData plotData = getPlotData(chartResponse);
+        return plotData;
+    }
+
+    private static PlotData getPlotData(HttpResponse<String> chartResponse) {
         ObjectMapper chartMapper = new ObjectMapper();
         PlotData plotData;
         try {
@@ -249,8 +281,7 @@ public class HelloController implements Initializable {
     private String formatDate(Date date) {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        String formattedDate = simpleDateFormat.format(date);
-        return formattedDate;
+        return simpleDateFormat.format(date);
     }
 
     private void setTable(ObservableList<Table> table2) {

@@ -16,8 +16,6 @@ import java.util.stream.Stream;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Api {
-    /*private final String linkTableA = "http://api.nbp.pl/api/exchangerates/tables/A/";
-    private final String linkTableB = "http://api.nbp.pl/api/exchangerates/tables/B/";*/
     private String link1;
     private String link2;
 
@@ -25,9 +23,6 @@ public class Api {
         CurrencyRate[] tableA = importTableData(link1, httpClient);
         CurrencyRate[] tableB = importTableData(link2, httpClient);
         return mergeTables(tableA, tableB);
-    }
-    public static CurrencyRate[] getApiData(HttpClient httpClient, String link1) {
-        return importTableData(link1, httpClient);
     }
 
     private static CurrencyRate[] mergeTables(CurrencyRate[] tableA, CurrencyRate[] tableB) {
@@ -42,7 +37,6 @@ public class Api {
         HttpResponse<String> response;
         try {
             response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
             return readResponseAndMap(response);
         } catch (ConnectException ex) {
             Alert noConnectionAlert = new Alert(Alert.AlertType.ERROR);
@@ -65,7 +59,5 @@ public class Api {
             throw new RuntimeException(e);
         }
     }
-
-
 
 }
