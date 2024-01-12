@@ -20,8 +20,6 @@ public class HelloApplication extends Application {
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.setMaximized(true);
-        scene.getStylesheets().add(getClass().getResource("/pl/pw/edu/mini/zpoif/styles.css").toExternalForm());
-       // scene.getStylesheets().add("./src/main/resources/pl/pw/edu/mini/zpoif/styles.css");
         stage.show();
     }
 

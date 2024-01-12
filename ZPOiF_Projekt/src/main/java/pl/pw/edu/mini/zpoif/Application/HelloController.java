@@ -114,6 +114,7 @@ public class HelloController implements Initializable {
                 wykresPorownanie.getData().add(series);
             }
             wykresPorownanie.setVisible(true);
+            wykresPorownanie.setAnimated(false);
             buttonPorownaj.setText("Porównaj waluty");
         });
 
@@ -140,7 +141,8 @@ public class HelloController implements Initializable {
 //                XYChart.Series<String, Number> series = processPlotData(plotData);
 //                wykresPorownanie.getData().add(series);
 //            }
-            ileCzegoPlot.getStyleClass().add("../../../resources/pl/pw/edu/mini/zpoif/styles.css");
+            ileCzegoPlot.setAnimated(false);
+            ileCzegoPlot.setBarGap(-100);
             ileCzegoPlot.setVisible(true);
         });
     }
