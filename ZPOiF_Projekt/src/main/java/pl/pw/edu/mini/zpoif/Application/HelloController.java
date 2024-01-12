@@ -132,7 +132,6 @@ public class HelloController implements Initializable {
                 series.setName(entry.getKey());
                 series.getData().add(new XYChart.Data<>(entry.getKey(), round(wartoscDomyslnaMonet * rate.getMid() / entry.getValue())));
                 ileCzegoPlot.getData().add(series);
-
             }
 //            for () {
 //                boolean isARate = data[0].getRates().contains(selectedRate);
@@ -141,6 +140,7 @@ public class HelloController implements Initializable {
 //                XYChart.Series<String, Number> series = processPlotData(plotData);
 //                wykresPorownanie.getData().add(series);
 //            }
+            ileCzegoPlot.getStyleClass().add("../../../resources/pl/pw/edu/mini/zpoif/styles.css");
             ileCzegoPlot.setVisible(true);
         });
     }
