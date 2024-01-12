@@ -171,7 +171,7 @@ public class HelloController implements Initializable {
                 ileCzegoPlot.getData().add(series);
             }
             ileCzegoPlot.setAnimated(false);
-            ileCzegoPlot.setBarGap(-100);
+            ileCzegoPlot.setBarGap(-120);
             ileCzegoPlot.setVisible(true);
         });
     }
