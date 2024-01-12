@@ -6,14 +6,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import org.controlsfx.control.CheckComboBox;
+import org.controlsfx.control.WorldMapView;
 import pl.pw.edu.mini.zpoif.Api.Api;
 import pl.pw.edu.mini.zpoif.Api.CurrencyRate;
 import pl.pw.edu.mini.zpoif.Api.Rate;
@@ -75,6 +76,16 @@ public class HelloController implements Initializable {
     private BarChart<String, Number> ileCzegoPlot;
     @FXML
     private Button ileCzegoButton;
+    @FXML
+    private WorldMapView worldMap;
+    @FXML
+    private Label krajLabel;
+    @FXML
+    private Label mapLabel;
+    @FXML
+    private Label mapValue;
+    @FXML
+    private ImageView countryFlag;
 
     private final HttpClient httpClient = HttpClient.newBuilder().build();
 
@@ -134,16 +145,37 @@ public class HelloController implements Initializable {
                 series.getData().add(new XYChart.Data<>(entry.getKey(), round(wartoscDomyslnaMonet * rate.getMid() / entry.getValue())));
                 ileCzegoPlot.getData().add(series);
             }
-//            for () {
-//                boolean isARate = data[0].getRates().contains(selectedRate);
-//                PlotData plotData = getPlotData(startDate, endDate, selectedRate, isARate);
-//                if (plotData == null) return;
-//                XYChart.Series<String, Number> series = processPlotData(plotData);
-//                wykresPorownanie.getData().add(series);
-//            }
+
             ileCzegoPlot.setAnimated(false);
             ileCzegoPlot.setBarGap(-100);
             ileCzegoPlot.setVisible(true);
+        });
+
+        //////////////// tworzenie mapy swiata //////////
+
+        worldMap.setOnMouseClicked(mouseEvent -> {
+            ObservableList<WorldMapView.Country> countries = worldMap.getSelectedCountries();
+            if (countries.isEmpty()) {
+                krajLabel.setText("Wybierz kraj z mapy");
+                mapLabel.setText("");
+                mapValue.setText("");
+                countryFlag.setImage(null);
+            } else {
+                Locale locale = new Locale("", countries.get(0).name());
+                krajLabel.setText(countries.get(0).getLocale().getDisplayCountry());
+                mapLabel.setText(Currency.getInstance(locale).getDisplayName(Locale.getDefault()));
+                String currencyCode = Currency.getInstance(locale).getCurrencyCode();
+                Optional<Double> rateValue = Optional.empty();
+                if (table2 != null) {
+                    List<Rate> rates = table2[].getRates().stream().filter(r -> Objects.equals(r.getCode(), currencyCode)).toList();
+                    if (!rates.isEmpty()) rateValue = Optional.ofNullable(rates.get(0).getMid());
+                }
+                if (rateValue.isEmpty()) {
+                    mapValue.setText("Brak danych");
+                } else {
+                    mapValue.setText(String.format("%.2f", rateValue.get()));
+                }
+            }
         });
     }
 

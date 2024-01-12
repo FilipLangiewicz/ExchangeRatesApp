@@ -2,6 +2,7 @@
 
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import org.controlsfx.control.*?>
@@ -13,66 +14,105 @@
             <Tab fx:id="start_button" text="start">
                 <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="600.0">
-                    </AnchorPane>
+                  <children>
+                     <ImageView fitHeight="152.0" fitWidth="173.0" layoutX="6.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@logoJavaProjekt.png" />
+                        </image></ImageView>
+                  </children></AnchorPane>
                 </content>
             </Tab>
             <Tab fx:id="tabela_button" text="tabela">
-                        <TableView fx:id="table" prefHeight="700.0" prefWidth="900.0">
-                            <columns>
-                                <TableColumn fx:id="currency" prefWidth="75.0" style="-fx-alignment: CENTER;" text="currency" />
-                                <TableColumn fx:id="date" prefWidth="75.0" style="-fx-alignment: CENTER;" text="date" />
-                                <TableColumn fx:id="rate" prefWidth="75.0" style="-fx-alignment: CENTER;" text="rate" />
-                            </columns>
-                            <columnResizePolicy>
-                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                            </columnResizePolicy>
-                        </TableView>
+                <TableView fx:id="table" prefHeight="700.0" prefWidth="900.0">
+                    <columns>
+                        <TableColumn fx:id="currency" prefWidth="75.0" style="-fx-alignment: CENTER;" text="currency" />
+                        <TableColumn fx:id="date" prefWidth="75.0" style="-fx-alignment: CENTER;" text="date" />
+                        <TableColumn fx:id="rate" prefWidth="75.0" style="-fx-alignment: CENTER;" text="rate" />
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                </TableView>
             </Tab>
             <Tab fx:id="porownanie_walut_button" text="Porównanie walut">
                 <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="600.0">
-                  <children>
-                     <DatePicker fx:id="startDateButton" layoutX="638.0" layoutY="68.0" />
-                     <DatePicker fx:id="endDateButton" layoutX="638.0" layoutY="104.0" />
-                     <CheckComboBox fx:id="currencyChoiceBox" layoutX="638.0" layoutY="142.0" prefHeight="21.0" prefWidth="176.0" />
-                      <LineChart fx:id="wykresPorownanie" layoutX="313.0" layoutY="183.0" prefHeight="400.0" prefWidth="825.0" title="Porównanie walut">
-                       <xAxis>
-                         <CategoryAxis side="BOTTOM" />
-                       </xAxis>
-                       <yAxis>
-                         <NumberAxis side="LEFT" />
-                       </yAxis>
-                     </LineChart>
+                        <children>
+                            <DatePicker fx:id="startDateButton" layoutX="638.0" layoutY="68.0" />
+                            <DatePicker fx:id="endDateButton" layoutX="638.0" layoutY="104.0" />
+                            <CheckComboBox fx:id="currencyChoiceBox" layoutX="638.0" layoutY="142.0" prefHeight="21.0" prefWidth="176.0" />
+                            <LineChart fx:id="wykresPorownanie" layoutX="313.0" layoutY="183.0" prefHeight="400.0" prefWidth="825.0" title="Porównanie walut">
+                                <xAxis>
+                                    <CategoryAxis side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis side="LEFT" />
+                                </yAxis>
+                            </LineChart>
 
-                     <Button fx:id="buttonPorownaj" layoutX="1000.0" layoutY="191.0" mnemonicParsing="false" text="Porównaj waluty" />
-                      <Text fx:id="linePlotTekst" fill="#161616" layoutX="512.0" layoutY="30.0" rotate="0.0" stroke="#161515" strokeType="OUTSIDE" strokeWidth="0.0" text="Wykres porównujący waluty na przestrzeni czasu." textAlignment="CENTER" wrappingWidth="427.90728759765625">
-                        <font>
-                           <Font name="Arial Black" size="21.0" />
-                        </font>
-                     </Text>
-                  </children></AnchorPane>
+                            <Button fx:id="buttonPorownaj" layoutX="1000.0" layoutY="191.0" mnemonicParsing="false" text="Porównaj waluty" />
+                            <Text fx:id="linePlotTekst" fill="#161616" layoutX="512.0" layoutY="30.0" rotate="0.0" stroke="#161515" strokeType="OUTSIDE" strokeWidth="0.0" text="Wykres porównujący waluty na przestrzeni czasu." textAlignment="CENTER" wrappingWidth="427.90728759765625">
+                                <font>
+                                    <Font name="Arial Black" size="21.0" />
+                                </font>
+                            </Text>
+                        </children></AnchorPane>
                 </content>
             </Tab>
             <Tab fx:id="ilecCzego" text="ileCzego">
                 <content>
                     <AnchorPane fx:id="ileCzego" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                  <children>
-                     <ChoiceBox fx:id="ileCzegoCheckBox" layoutX="630.0" layoutY="90.0" prefWidth="150.0" />
-                     <Button fx:id="ileCzegoButton" layoutX="780.0" layoutY="90.0" mnemonicParsing="false" text="Button" />
-                     <BarChart fx:id="ileCzegoPlot" layoutX="270.0" layoutY="155.0" prefHeight="400.0" prefWidth="825.0">
-                       <xAxis>
-                         <CategoryAxis side="BOTTOM" />
-                       </xAxis>
-                       <yAxis>
-                         <NumberAxis side="LEFT" />
-                       </yAxis>
-                     </BarChart>
-                     <Text fx:id="ileCzegoWelcomeText" fill="#161616" layoutX="288.0" layoutY="37.0" rotate="0.0" stroke="#161515" strokeType="OUTSIDE" strokeWidth="0.0" text="Porównaj, ile produktów możesz kupić w Polsce za 100 monet wybranej waluty." textAlignment="CENTER">
-                        <font>
-                           <Font name="Arial Black" size="21.0" />
-                        </font>
-                     </Text>
-                  </children></AnchorPane>
+                        <children>
+                            <ChoiceBox fx:id="ileCzegoCheckBox" layoutX="630.0" layoutY="90.0" prefWidth="150.0" />
+                            <Button fx:id="ileCzegoButton" layoutX="780.0" layoutY="90.0" mnemonicParsing="false" text="Button" />
+                            <BarChart fx:id="ileCzegoPlot" layoutX="270.0" layoutY="155.0" prefHeight="400.0" prefWidth="825.0">
+                                <xAxis>
+                                    <CategoryAxis side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis side="LEFT" />
+                                </yAxis>
+                            </BarChart>
+                            <Text fx:id="ileCzegoWelcomeText" fill="#161616" layoutX="288.0" layoutY="37.0" rotate="0.0" stroke="#161515" strokeType="OUTSIDE" strokeWidth="0.0" text="Porównaj, ile produktów możesz kupić w Polsce za 100 monet wybranej waluty." textAlignment="CENTER">
+                                <font>
+                                    <Font name="Arial Black" size="21.0" />
+                                </font>
+                            </Text>
+                        </children></AnchorPane>
+                </content>
+            </Tab>
+            <Tab fx:id="mapaTab" text="mapka">
+                <content>
+                    <StackPane prefHeight="150.0" prefWidth="200.0">
+                        <children>
+                            <VBox prefHeight="200.0" prefWidth="100.0">
+                                <children>
+                                    <GridPane minHeight="75.0" style="-fx-background-color: white;">
+                                        <columnConstraints>
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        </columnConstraints>
+                                        <rowConstraints>
+                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        </rowConstraints>
+                                        <children>
+                                            <Label fx:id="mapLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                                            <Label fx:id="mapValue" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowSpan="2">
+                                                <font>
+                                                    <Font size="30.0" />
+                                                </font>
+                                            </Label>
+                                            <Label fx:id="krajLabel" text="Wybierz kraj" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                                            </Label>
+                                        </children>
+                                    </GridPane>
+                                    <WorldMapView fx:id="worldMap" countrySelectionMode="SINGLE" locationSelectionMode="SINGLE" prefHeight="600.0" prefWidth="699.0" zoomFactor="3.0" />
+                                </children>
+                            </VBox>
+                        </children>
+                    </StackPane>
                 </content>
             </Tab>
         </tabs>
