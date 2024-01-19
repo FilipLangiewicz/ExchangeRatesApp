@@ -1,9 +1,5 @@
-package pl.pw.edu.mini.zpoif.Api;
+package pl.pw.edu.mini.zpoif.Data.tableData;
 
-import javafx.scene.control.Tab;
-
-import java.util.Date;
-import java.util.List;
 
 public class Table {
     private String currency;

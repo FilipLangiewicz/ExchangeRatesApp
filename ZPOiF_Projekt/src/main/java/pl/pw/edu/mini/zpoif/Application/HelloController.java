@@ -14,11 +14,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.WorldMapView;
 import pl.pw.edu.mini.zpoif.Api.Api;
-import pl.pw.edu.mini.zpoif.Api.CurrencyRate;
-import pl.pw.edu.mini.zpoif.Api.Rate;
-import pl.pw.edu.mini.zpoif.Api.Table;
-import pl.pw.edu.mini.zpoif.plotData.PlotData;
-import pl.pw.edu.mini.zpoif.plotData.RatePlot;
+import pl.pw.edu.mini.zpoif.Data.rateData.CurrencyRate;
+import pl.pw.edu.mini.zpoif.Data.rateData.Rate;
+import pl.pw.edu.mini.zpoif.Data.tableData.Table;
+import pl.pw.edu.mini.zpoif.Data.plotData.PlotData;
+import pl.pw.edu.mini.zpoif.Data.plotData.RatePlot;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -32,7 +32,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static java.lang.Math.round;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 public class HelloController implements Initializable {
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -179,12 +179,11 @@ public class HelloController implements Initializable {
     private void makePorownaniaWalut(CurrencyRate[] data) {
         setChoiceBoxProperties(data);
         buttonPorownaj.setOnAction(actionEvent -> {
-
             ObservableList<Rate> rates = currencyChoiceBox.getCheckModel().getCheckedItems();
-            //if (!validateRates(rates)) return;
+            if (!isRateCorrect(rates)) return;
             LocalDate endDate = endDateButton.getValue();
             LocalDate startDate = startDateButton.getValue();
-            //if (!validateDates(startDate, endDate)) return;
+            if (!isDateCorrect(startDate, endDate)) return;
             wykresPorownanie.getData().clear();
             wykresPorownanie.setTitle("Kursy wybranych walut między " + startDate.format(dateTimeFormatter) + " a "
                     + endDate.format(dateTimeFormatter));
@@ -313,5 +312,41 @@ public class HelloController implements Initializable {
             defaultRate.setMid(1.00);
             items.add(defaultRate);
         }
+    }
+
+    private boolean isRateCorrect(ObservableList<Rate> rates) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Error!");
+        if (rates == null
+                || rates.isEmpty()
+                || rates.stream().allMatch(Objects::isNull)) {
+            alert.setHeaderText("Wybierz walutę");
+            alert.setContentText("Wybierz walutę do wykresu");
+            alert.showAndWait();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isDateCorrect(LocalDate startDate, LocalDate endDate) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Error!");
+        LocalDate now = LocalDate.now();
+        LocalDate earliestDate = LocalDate.of(2002, 1, 2);
+        if (startDate == null
+                || endDate == null
+                || startDate.isBefore(earliestDate)
+                || endDate.isBefore(earliestDate)
+                || startDate.isAfter(now)
+                || endDate.isAfter(now)
+                || startDate.isAfter(endDate)
+                || DAYS.between(startDate, endDate) > 366) {
+            alert.setHeaderText("Podaj poprawną datę");
+            alert.setContentText("Daty nie mogą się różnić o więcej niż rok (limit API NBP)! " +
+                    "Data musi być z przedziału od 2 stycznia 2002 r. do dziś.");
+            alert.showAndWait();
+            return false;
+        }
+        return true;
     }
 }

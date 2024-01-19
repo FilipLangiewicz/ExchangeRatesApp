@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import pl.pw.edu.mini.zpoif.Data.rateData.CurrencyRate;
 
 public class Api {
     private String link1;

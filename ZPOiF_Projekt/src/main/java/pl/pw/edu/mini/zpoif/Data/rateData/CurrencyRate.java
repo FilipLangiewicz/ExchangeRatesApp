@@ -1,4 +1,4 @@
-package pl.pw.edu.mini.zpoif.Api;
+package pl.pw.edu.mini.zpoif.Data.rateData;
 import com.fasterxml.jackson.annotation.*;
 
 import javax.annotation.processing.Generated;

@@ -1,4 +1,4 @@
-package pl.pw.edu.mini.zpoif.plotData;
+package pl.pw.edu.mini.zpoif.Data.plotData;
 
 import com.fasterxml.jackson.annotation.*;
 

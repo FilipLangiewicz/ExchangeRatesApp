@@ -34,7 +34,7 @@
             <Tab fx:id="tabela_button" text="tabela">
                 <TableView fx:id="table" prefHeight="700.0" prefWidth="900.0">
                     <columns>
-                        <TableColumn fx:id="currency" prefWidth="75.0" text="waluta" />
+                        <TableColumn fx:id="currency" prefWidth="75.0" style="-fx-alignment: CENTER;" text="waluta" />
                         <TableColumn fx:id="date" prefWidth="75.0" style="-fx-alignment: CENTER;" text="data" />
                         <TableColumn fx:id="rate" prefWidth="75.0" style="-fx-alignment: CENTER;" text="kurs" />
                     </columns>
@@ -50,7 +50,7 @@
                             <DatePicker fx:id="startDateButton" layoutX="534.0" layoutY="64.0" />
                             <DatePicker fx:id="endDateButton" layoutX="534.0" layoutY="99.0" />
                             <CheckComboBox fx:id="currencyChoiceBox" layoutX="533.0" layoutY="136.0" prefHeight="21.0" prefWidth="176.0" />
-                            <LineChart fx:id="wykresPorownanie" layoutX="210.0" layoutY="177.0" prefHeight="452.0" prefWidth="821.0" title="Porównanie walut">
+                            <LineChart fx:id="wykresPorownanie" style="-fx-background-color: white;" layoutX="210.0" layoutY="177.0" prefHeight="452.0" prefWidth="821.0" title="Kurs danej waluty">
                                 <xAxis>
                                     <CategoryAxis side="BOTTOM" />
                                 </xAxis>
@@ -59,8 +59,8 @@
                                 </yAxis>
                             </LineChart>
 
-                            <Button fx:id="buttonPorownaj" layoutX="830.0" layoutY="182.0" mnemonicParsing="false" text="Porównaj waluty" />
-                            <Text fx:id="linePlotTekst" fill="WHITE" layoutX="180.0" layoutY="41.0" rotate="0.0" stroke="#161515" strokeType="OUTSIDE" strokeWidth="0.0" text="Wykres porównujący waluty na przestrzeni czasu." textAlignment="CENTER" wrappingWidth="890.9072875976562">
+                            <Button fx:id="buttonPorownaj" layoutX="830.0" layoutY="139.0" mnemonicParsing="false" text="Porównaj waluty" />
+                            <Text fx:id="linePlotTekst" fill="WHITE" layoutX="180.0" layoutY="41.0" rotate="0.0" stroke="#161515" strokeType="OUTSIDE" strokeWidth="0.0" text="Wykres porównujący waluty na przestrzeni czasu" textAlignment="CENTER" wrappingWidth="890.9072875976562">
                                 <font>
                                     <Font name="Arial Black" size="30.0" />
                                 </font>
@@ -74,7 +74,7 @@
                         <children>
                             <ChoiceBox fx:id="ileCzegoCheckBox" layoutX="564.0" layoutY="90.0" prefWidth="150.0" />
                             <Button fx:id="ileCzegoButton" layoutX="721.0" layoutY="90.0" mnemonicParsing="false" text="Sprawdź" textAlignment="CENTER" />
-                            <BarChart fx:id="ileCzegoPlot" layoutX="113.0" layoutY="126.0" prefHeight="464.0" prefWidth="1025.0" style="-fx-background-color: black;">
+                            <BarChart fx:id="ileCzegoPlot" layoutX="113.0" layoutY="126.0" prefHeight="464.0" prefWidth="1025.0" style="-fx-background-color: white;" title="Przeliczenie 100 jednostek waluty na liczbę produktów">
                                 <xAxis>
                                     <CategoryAxis side="BOTTOM" />
                                 </xAxis>

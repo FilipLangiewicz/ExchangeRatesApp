@@ -4,13 +4,9 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import pl.pw.edu.mini.zpoif.Api.Api;
-import pl.pw.edu.mini.zpoif.Api.CurrencyRate;
 
 
 import java.io.IOException;
-import java.net.http.HttpClient;
-import java.util.Arrays;
 
 public class HelloApplication extends Application {
     @Override
